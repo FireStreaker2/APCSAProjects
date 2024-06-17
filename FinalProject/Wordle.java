@@ -6,17 +6,13 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import java.util.ArrayList;
 import java.util.Scanner;
-
 import javax.imageio.ImageIO;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class Wordle extends JFrame {
+
   private ArrayList<String> words = new ArrayList<String>();
   GridBagConstraints gbc;
   private JPanel panel;
@@ -38,7 +35,6 @@ public class Wordle extends JFrame {
 
   public Wordle() throws FileNotFoundException {
     super("Temu Wordle");
-
     // funny snippet that i "borrowed"
     panel = new JPanel() {
       @Override
@@ -46,11 +42,20 @@ public class Wordle extends JFrame {
         super.paintComponent(g);
 
         try {
-          BufferedImage image = ImageIO.read(new FileInputStream("wordcloud.png"));
+          BufferedImage image = ImageIO.read(
+            new FileInputStream("wordcloud.png")
+          );
           g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
           BufferedImage blank = ImageIO.read(new FileInputStream("blank.png"));
-          g.drawImage(blank, getWidth() / 2 - 200, getHeight() / 2 - 400, 400, 800, this);
+          g.drawImage(
+            blank,
+            getWidth() / 2 - 200,
+            getHeight() / 2 - 400,
+            400,
+            800,
+            this
+          );
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -59,8 +64,7 @@ public class Wordle extends JFrame {
 
     Scanner scanner = new Scanner(new File("words.txt"));
 
-    while (scanner.hasNextLine())
-      words.add(scanner.nextLine());
+    while (scanner.hasNextLine()) words.add(scanner.nextLine());
     scanner.close();
 
     answer = words.get((int) (Math.random() * words.size() + 1) + 1);
@@ -114,10 +118,10 @@ public class Wordle extends JFrame {
     input.setText("");
     warning.setText("");
 
-    if (response.length() != 5)
-      warning.setText("Answer must be 5 characters long!");
-    else if (!words.contains(response))
-      warning.setText("Invalid Word!");
+    if (response.length() != 5) warning.setText(
+      "Answer must be 5 characters long!"
+    );
+    else if (!words.contains(response)) warning.setText("Invalid Word!");
     else {
       String content = "<html>";
       String temp = answer;
@@ -125,12 +129,11 @@ public class Wordle extends JFrame {
       for (int i = 0; i < response.length(); i++) {
         char character = response.charAt(i);
 
-        if (character == temp.charAt(i))
-          content += ("<font color='#00ff00'>" + character + "</font>");
-        else if (temp.indexOf(character) != -1)
-          content += ("<font color='#ffff00'>" + character + "</font>");
-        else
-          content += ("<font color='#cacaca'>" + character + "</font>");
+        if (character == temp.charAt(i)) content +=
+        ("<font color='#00ff00'>" + character + "</font>");
+        else if (temp.indexOf(character) != -1) content +=
+        ("<font color='#ffff00'>" + character + "</font>");
+        else content += ("<font color='#cacaca'>" + character + "</font>");
 
         temp = temp.replace(character, '0');
       }

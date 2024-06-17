@@ -1,4 +1,3 @@
-
 // AP Comp Sci, April 3rd, 2024
 // Programming Project #12: Boggle (Chapter 12)
 
@@ -10,126 +9,142 @@ import java.util.Random;
  * Board class
  */
 public class Board {
-	// private fields
-	public String[][] array; // ALL LETTERS IN THE BOGGLE BOARD
-	private WordList words; // ALL VALID WORDS IN THE WORD LIST
 
-	/**
-	 * Constructor for the board
-	 * 
-	 * @param list
-	 * @param size
-	 */
-	public Board(WordList list, int size) {
-		// initialize fields
-		words = list;
-		array = new String[size][size];
+  // private fields
+  public String[][] array; // ALL LETTERS IN THE BOGGLE BOARD
+  private WordList words; // ALL VALID WORDS IN THE WORD LIST
 
-		// populate boggle board using nextLetter method
-		for (int i = 0; i < size; i++)
-			for (int j = 0; j < array[i].length; j++)
-				array[i][j] = words.nextLetter().toUpperCase();
-	}
+  /**
+   * Constructor for the board
+   *
+   * @param list
+   * @param size
+   */
+  public Board(WordList list, int size) {
+    // initialize fields
+    words = list;
+    array = new String[size][size];
 
-	/**
-	 * Find method
-	 * 
-	 * Recursively goes through the boggle board and checks all valid words using
-	 * backtracking
-	 * 
-	 * @return
-	 */
-	public ArrayList<String> find() {
-		// array list that holds all valid words
-		ArrayList<String> valids = new ArrayList<String>();
+    // populate boggle board using nextLetter method
+    for (int i = 0; i < size; i++) for (
+      int j = 0;
+      j < array[i].length;
+      j++
+    ) array[i][j] = words.nextLetter().toUpperCase();
+  }
 
-		boolean visited[][] = new boolean[array.length][array.length];
+  /**
+   * Find method
+   *
+   * Recursively goes through the boggle board and checks all valid words using
+   * backtracking
+   *
+   * @return
+   */
+  public ArrayList<String> find() {
+    // array list that holds all valid words
+    ArrayList<String> valids = new ArrayList<String>();
 
-		String str = "";
+    boolean visited[][] = new boolean[array.length][array.length];
 
-		for (int i = 0; i < array.length; i++)
-			for (int j = 0; j < array.length; j++)
-				find(array, visited, i, j, str, valids);
+    String str = "";
 
-		ArrayList<String> seen = new ArrayList<String>();
+    for (int i = 0; i < array.length; i++) for (
+      int j = 0;
+      j < array.length;
+      j++
+    ) find(array, visited, i, j, str, valids);
 
-		for (int i = valids.size() - 1; i >= 0; i--) {
-			if (seen.contains(valids.get(i)))
-				valids.remove(i);
+    ArrayList<String> seen = new ArrayList<String>();
 
-			seen.add(valids.get(i));
-		}
+    for (int i = valids.size() - 1; i >= 0; i--) {
+      if (seen.contains(valids.get(i))) valids.remove(i);
 
-		// prefix code
-		String[] prefixes = { "RE", "STR", "UN" };
+      seen.add(valids.get(i));
+    }
 
-		Random random = new Random();
-		String prefix = prefixes[random.nextInt(prefixes.length)];
+    // prefix code
+    String[] prefixes = { "RE", "STR", "UN" };
 
-		int x = random.nextInt(array.length);
-		int y = random.nextInt(array.length);
+    Random random = new Random();
+    String prefix = prefixes[random.nextInt(prefixes.length)];
 
-		for (int i = 0; i < prefix.length(); i++) {
-			if (x + i >= array.length && y + i >= array.length)
-				array[x - i][y - i] = prefix.charAt(i) + "";
-			else if (x + i >= array.length && y + i < array.length)
-				array[x - i][y + i] = prefix.charAt(i) + "";
-			else if (x + i < array.length && y + i >= array.length)
-				array[x + i][y - i] = prefix.charAt(i) + "";
-			else
-				array[x + i][y + i] = prefix.charAt(i) + "";
-		}
+    int x = random.nextInt(array.length);
+    int y = random.nextInt(array.length);
 
-		return valids;
-	}
+    for (int i = 0; i < prefix.length(); i++) {
+      if (x + i >= array.length && y + i >= array.length) array[x - i][y - i] =
+        prefix.charAt(i) + "";
+      else if (x + i >= array.length && y + i < array.length) array[x - i][y +
+        i] = prefix.charAt(i) + "";
+      else if (x + i < array.length && y + i >= array.length) array[x + i][y -
+        i] = prefix.charAt(i) + "";
+      else array[x + i][y + i] = prefix.charAt(i) + "";
+    }
 
-	/**
-	 * Find method helper
-	 * 
-	 * Helper method with overloads to assist the main find method
-	 * 
-	 * @param boggle
-	 * @param visited
-	 * @param i
-	 * @param j
-	 * @param result
-	 * @param valids
-	 */
-	public void find(String boggle[][], boolean visited[][], int i, int j, String result, ArrayList<String> valids) {
-		visited[i][j] = true;
-		result = result + boggle[i][j];
+    return valids;
+  }
 
-		for (int row = i - 1; row <= i + 1 && row < array.length; row++)
-			for (int col = j - 1; col <= j + 1 && col < array.length; col++)
-				if (row >= 0 && col >= 0 && !visited[row][col])
-					find(boggle, visited, row, col, result, valids);
+  /**
+   * Find method helper
+   *
+   * Helper method with overloads to assist the main find method
+   *
+   * @param boggle
+   * @param visited
+   * @param i
+   * @param j
+   * @param result
+   * @param valids
+   */
+  public void find(
+    String boggle[][],
+    boolean visited[][],
+    int i,
+    int j,
+    String result,
+    ArrayList<String> valids
+  ) {
+    visited[i][j] = true;
+    result = result + boggle[i][j];
 
-		// don't continue if it's too long
-		if (result.length() > words.getLongestWordLength())
-			return;
+    for (int row = i - 1; row <= i + 1 && row < array.length; row++) for (
+      int col = j - 1;
+      col <= j + 1 && col < array.length;
+      col++
+    ) if (row >= 0 && col >= 0 && !visited[row][col]) find(
+      boggle,
+      visited,
+      row,
+      col,
+      result,
+      valids
+    );
 
-		if (words.contains(result))
-			valids.add(result);
+    // don't continue if it's too long
+    if (result.length() > words.getLongestWordLength()) return;
 
-		visited[i][j] = false;
-	}
+    if (words.contains(result)) valids.add(result);
 
-	/**
-	 * toString method
-	 * 
-	 * @return string version of the board
-	 */
-	public String toString() {
-		String result = "";
+    visited[i][j] = false;
+  }
 
-		for (int i = 0; i < array.length; i++) {
-			for (int j = 0; j < array[i].length; j++) {
-				result += array[i][j] + " ";
-			}
+  /**
+   * toString method
+   *
+   * @return string version of the board
+   */
+  public String toString() {
+    String result = "";
 
-			result += "\n";
-		}
+    for (int i = 0; i < array.length; i++) {
+      for (int j = 0; j < array[i].length; j++) {
+        result += array[i][j] + " ";
+      }
 
-		return result;
-	}
+      result += "\n";
+    }
+
+    return result;
+  }
 }

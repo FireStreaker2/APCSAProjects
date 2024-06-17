@@ -1,2 +1,3 @@
 # APCSAProjects
- Projects I made during my APCSA class.
+
+Projects I made during my APCSA class.

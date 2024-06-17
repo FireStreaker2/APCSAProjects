@@ -6,12 +6,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -19,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class NumberGuessing extends JFrame {
+
   private JTextField input;
   private JLabel prompt;
   private JLabel answer;
@@ -28,7 +26,6 @@ public class NumberGuessing extends JFrame {
 
   public NumberGuessing() {
     super("Guessing Game");
-
     // funny snippet that i "borrowed"
     JPanel panel = new JPanel() {
       @Override
@@ -36,11 +33,20 @@ public class NumberGuessing extends JFrame {
         super.paintComponent(g);
 
         try {
-          BufferedImage image = ImageIO.read(new FileInputStream("numbers.jpg"));
+          BufferedImage image = ImageIO.read(
+            new FileInputStream("numbers.jpg")
+          );
           g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
 
           BufferedImage blank = ImageIO.read(new FileInputStream("blank.png"));
-          g.drawImage(blank, getWidth() / 2 - 300, getHeight() / 2 - 100, 600, 200, this);
+          g.drawImage(
+            blank,
+            getWidth() / 2 - 300,
+            getHeight() / 2 - 100,
+            600,
+            200,
+            this
+          );
         } catch (IOException e) {
           e.printStackTrace();
         }
@@ -109,13 +115,13 @@ public class NumberGuessing extends JFrame {
     guesses++;
 
     if (response == number) {
-      answer.setText("Correct! Succesfully guessed in " + guesses + " guesses.");
+      answer.setText(
+        "Correct! Succesfully guessed in " + guesses + " guesses."
+      );
 
       input.setEnabled(false);
       submit.setEnabled(false);
-    } else if (response > number)
-      answer.setText("The answer is lower.");
-    else
-      answer.setText("The answer is higher.");
+    } else if (response > number) answer.setText("The answer is lower.");
+    else answer.setText("The answer is higher.");
   }
 }
