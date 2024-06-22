@@ -1,0 +1,16 @@
+{
+  "name": "apcsaprojects",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "Projects I made during my APCSA class.",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "author": "FireStreaker2",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^3.3.2",
+    "prettier-plugin-java": "^2.6.0"
+  }
+}
